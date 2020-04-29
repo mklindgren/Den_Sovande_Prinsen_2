@@ -8,9 +8,10 @@ public class GameManager : MonoBehaviour
 {
     public float levelStartDelay = 2f;
     public float turnDelay = .1f;
+    public float menuReloadDelay = 4f;
     public static GameManager instance = null;
     public BoardManager boardScript;
-    public int playerFoodPoints = 100;
+    public int playerFoodPoints = 100;//!!
     [HideInInspector] public bool playersTurn = true;
 
     private Text levelText;
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
 
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        levelText.text = "Day " + level;
+        levelText.text = "Floor " + level;
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
@@ -75,12 +76,12 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        levelText.text = "After " + level + " days, you starved.";
+        levelText.text = "After " + level + " floors,\n you fall asleep.";
         levelImage.SetActive(true);
         enabled = false;
+        StartCoroutine(BackToMenu());
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (playersTurn || enemiesMoving || doingSetup)
@@ -113,5 +114,10 @@ public class GameManager : MonoBehaviour
 
         playersTurn = true;
         enemiesMoving = false;
+    }
+    IEnumerator BackToMenu()
+    {
+        yield return new WaitForSeconds(menuReloadDelay);
+        SceneManager.LoadScene(0);
     }
 }
