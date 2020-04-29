@@ -10,7 +10,7 @@ public class Player : MovingObject
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
     public float restartLevelDelay = 1f;
-    public Text foodText;
+    public Text sleepText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
     public AudioClip eatSound1;
@@ -20,7 +20,7 @@ public class Player : MovingObject
     public AudioClip gameOverSound;
 
     private Animator animator;
-    private int food;
+    private int sleep;
     private Vector2 touchOrigin = -Vector2.one;
 
     // Start is called before the first frame update
@@ -28,16 +28,16 @@ public class Player : MovingObject
     {
         animator = GetComponent<Animator>();
 
-        food = GameManager.instance.playerFoodPoints;
+        sleep = GameManager.instance.playerSleepPoints;
 
-        foodText.text = "Food: " + food;
+        sleepText.text = "Food: " + sleep;
 
         base.Start();
     }
 
     private void OnDisable()
     {
-        GameManager.instance.playerFoodPoints = food;
+        GameManager.instance.playerSleepPoints = sleep;
     }
 
     // Update is called once per frame
@@ -93,8 +93,8 @@ public class Player : MovingObject
 
     protected override void AttemptMove <T>(int xDir, int yDir)
     {
-        food--;
-        foodText.text = "Food: " + food;
+        sleep--;
+        sleepText.text = "Food: " + sleep;
 
         base.AttemptMove<T>(xDir, yDir);
 
@@ -118,15 +118,15 @@ public class Player : MovingObject
         }
         else if (other.tag == "Food")
         {
-            food += pointsPerFood;
-            foodText.text = "+" + pointsPerFood + " Food: " + food;
+            sleep += pointsPerFood;
+            sleepText.text = "+" + pointsPerFood + " Food: " + sleep;
             SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
             other.gameObject.SetActive(false);
         }
         else if (other.tag == "Soda")
         {
-            food += pointsPerFood;
-            foodText.text = "+" + pointsPerSoda+ " Food: " + food;
+            sleep += pointsPerFood;
+            sleepText.text = "+" + pointsPerSoda+ " Food: " + sleep;
             SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
             other.gameObject.SetActive(false);
         }
@@ -144,17 +144,17 @@ public class Player : MovingObject
         SceneManager.LoadScene(0);
     }
 
-    public void LoseFood (int loss)
+    public void LoseSleep (int loss)
     {
         animator.SetTrigger("playerHit");
-        food -= loss;
-        foodText.text = "-" + loss + " Food: " + food;
+        sleep -= loss;
+        sleepText.text = "-" + loss + " Food: " + sleep;
         CheckIfGameOver();
     }
 
     private void CheckIfGameOver()
     {
-        if (food <= 0)
+        if (sleep <= 0)
         {
             SoundManager.instance.PlaySingle(gameOverSound);
             SoundManager.instance.musicSource.Stop();

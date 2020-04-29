@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public float menuReloadDelay = 4f;
     public static GameManager instance = null;
     public BoardManager boardScript;
-    public int playerFoodPoints = 100;//!!
+    public int playerSleepPoints = 100;//!!
     [HideInInspector] public bool playersTurn = true;
 
     private Text levelText;
