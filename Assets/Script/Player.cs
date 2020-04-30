@@ -9,8 +9,10 @@ public class Player : MovingObject
     public int wallDamage = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
+    public static int sleep;//ändrad från private
     public float restartLevelDelay = 1f;
     public Text sleepText;
+    public SleepBar sleepBar;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
     public AudioClip eatSound1;
@@ -20,7 +22,7 @@ public class Player : MovingObject
     public AudioClip gameOverSound;
 
     private Animator animator;
-    private int sleep;
+
     private Vector2 touchOrigin = -Vector2.one;
 
     // Start is called before the first frame update
@@ -28,22 +30,23 @@ public class Player : MovingObject
     {
         animator = GetComponent<Animator>();
 
-        sleep = GameManager.instance.playerSleepPoints;
+        sleep = GameMngr.instance.playerSleepPoints;
 
         sleepText.text = "Food: " + sleep;
+
 
         base.Start();
     }
 
     private void OnDisable()
     {
-        GameManager.instance.playerSleepPoints = sleep;
+        GameMngr.instance.playerSleepPoints = sleep;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.instance.playersTurn) return;
+        if (!GameMngr.instance.playersTurn) return;
 
         int horizontal = 0;
         int vertical = 0;
@@ -106,7 +109,7 @@ public class Player : MovingObject
 
         CheckIfGameOver();
 
-        GameManager.instance.playersTurn = false;
+        GameMngr.instance.playersTurn = false;
     }
 
     private void OnTriggerEnter2D (Collider2D other)
@@ -120,7 +123,7 @@ public class Player : MovingObject
         {
             sleep += pointsPerFood;
             sleepText.text = "+" + pointsPerFood + " Food: " + sleep;
-            SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
+            //SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
             other.gameObject.SetActive(false);
         }
         else if (other.tag == "Soda")
@@ -158,7 +161,7 @@ public class Player : MovingObject
         {
             SoundManager.instance.PlaySingle(gameOverSound);
             SoundManager.instance.musicSource.Stop();
-            GameManager.instance.GameOver();
+            GameMngr.instance.GameOver();
         }
     }
 }

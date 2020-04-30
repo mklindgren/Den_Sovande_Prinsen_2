@@ -7,13 +7,28 @@ public class SleepBar : MonoBehaviour
 {
     public Slider slider;
 
-    public void SetMaxSleep(int sleep)
+    private float sleepPoints; // = Player.sleep;
+
+    private void Start()
     {
-        slider.maxValue = sleep;
-        slider.value = sleep;
+        sleepPoints = Player.sleep;
     }
-    public void SetSleep(int sleep)
+
+    private void Update()
     {
-        slider.value = sleep; 
+        sleepPoints = Player.sleep;
+        SetMaxSleep(sleepPoints);
+        SetSleep(sleepPoints);
+        //Debug.Log(sleepPoints);
+    }
+
+    public void SetMaxSleep(float sleepy)
+    {
+        slider.maxValue = sleepy;
+        slider.value = sleepy;
+    }
+    public void SetSleep(float sleepy)
+    {
+        slider.value = sleepy; 
     }
 }

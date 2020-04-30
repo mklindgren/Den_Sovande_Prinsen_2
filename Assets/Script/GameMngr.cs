@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameMngr : MonoBehaviour
 {
     public float levelStartDelay = 2f;
     public float turnDelay = .1f;
     public float menuReloadDelay = 4f;
-    public static GameManager instance = null;
+    public static GameMngr instance = null;
     public BoardManager boardScript;
     public int playerSleepPoints = 100;//!!
     [HideInInspector] public bool playersTurn = true;
