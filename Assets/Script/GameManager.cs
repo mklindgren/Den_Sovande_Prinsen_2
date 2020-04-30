@@ -118,6 +118,6 @@ public class GameManager : MonoBehaviour
     IEnumerator BackToMenu()
     {
         yield return new WaitForSeconds(menuReloadDelay);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
