@@ -16,7 +16,7 @@ public class GameMngr : MonoBehaviour
 
     private Text levelText;
     private GameObject levelImage;
-    public int Level { get; private set; } = 0;
+    private int level = 0;
     private List<Enemy> enemies;
     private bool enemiesMoving;
     private bool doingSetup;
@@ -39,7 +39,7 @@ public class GameMngr : MonoBehaviour
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        Level++;
+        level++;
         InitGame();
     }
 
@@ -60,12 +60,12 @@ public class GameMngr : MonoBehaviour
 
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        levelText.text = "Floor " + Level;
+        levelText.text = "Floor " + level;
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
         enemies.Clear();
-        boardScript.SetupScene(Level);
+        boardScript.SetupScene(level);
     }
 
     private void HideLevelImage()
@@ -76,7 +76,7 @@ public class GameMngr : MonoBehaviour
 
     public void GameOver()
     {
-        levelText.text = "After " + Level + " floors,\n you fall asleep.";
+        levelText.text = "After " + level + " floors,\n you fall asleep.";
         levelImage.SetActive(true);
         enabled = false;
         StartCoroutine(BackToMenu());

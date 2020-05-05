@@ -25,10 +25,6 @@ public class Player : MovingObject
 
     private Vector2 touchOrigin = -Vector2.one;
 
-    private int keyLayer, doorLayer;
-    private bool hasKey;
-
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -38,8 +34,6 @@ public class Player : MovingObject
 
         sleepText.text = "Food: " + sleep;
 
-        keyLayer = LayerMask.NameToLayer("Key");
-        doorLayer = LayerMask.NameToLayer("Door");
 
         base.Start();
     }
@@ -57,7 +51,7 @@ public class Player : MovingObject
         int horizontal = 0;
         int vertical = 0;
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+    #if UNITY_STANDALONE || UNITY_WEBPLAYER
         horizontal = (int)Input.GetAxisRaw("Horizontal");
         vertical = (int)Input.GetAxisRaw("Vertical");
 
@@ -66,7 +60,7 @@ public class Player : MovingObject
             vertical = 0;
         }
 
-#else
+    #else
         if (Input.touchCount > 0)
         {
             Touch myTouch = Input.touches[0];
@@ -92,7 +86,7 @@ public class Player : MovingObject
             }
         }
 
-#endif
+    #endif
 
         if (horizontal != 0 || vertical != 0)
         {
@@ -100,7 +94,7 @@ public class Player : MovingObject
         }
     }
 
-    protected override void AttemptMove<T>(int xDir, int yDir)
+    protected override void AttemptMove <T>(int xDir, int yDir)
     {
         sleep--;
         sleepText.text = "Food: " + sleep;
@@ -108,7 +102,7 @@ public class Player : MovingObject
         base.AttemptMove<T>(xDir, yDir);
 
         RaycastHit2D hit;
-        if (Move(xDir, yDir, out hit))
+        if (Move (xDir, yDir, out hit))
         {
             SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
         }
@@ -118,9 +112,9 @@ public class Player : MovingObject
         GameMngr.instance.playersTurn = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D (Collider2D other)
     {
-        if (other.tag == "Exit" || (other.gameObject.layer == doorLayer && hasKey))
+        if (other.tag == "Exit")
         {
             Invoke("Restart", restartLevelDelay);
             enabled = false;
@@ -135,18 +129,13 @@ public class Player : MovingObject
         else if (other.tag == "Soda")
         {
             sleep += pointsPerFood;
-            sleepText.text = "+" + pointsPerSoda + " Food: " + sleep;
+            sleepText.text = "+" + pointsPerSoda+ " Food: " + sleep;
             SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
-            other.gameObject.SetActive(false);
-        }
-        else if (other.gameObject.layer == keyLayer)
-        {
-            hasKey = true;
             other.gameObject.SetActive(false);
         }
     }
 
-    protected override void OnCantMove<T>(T component)
+    protected override void OnCantMove<T> (T component)
     {
         Wall hitWall = component as Wall;
         hitWall.DamageWall(wallDamage);
@@ -158,7 +147,7 @@ public class Player : MovingObject
         SceneManager.LoadScene(0);
     }
 
-    public void LoseSleep(int loss)
+    public void LoseSleep (int loss)
     {
         animator.SetTrigger("playerHit");
         sleep -= loss;
