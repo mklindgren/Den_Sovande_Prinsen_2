@@ -23,10 +23,7 @@ public class BoardManager : MonoBehaviour
     public int rows = 8;
     public Count wallCount = new Count(5, 9);
     public Count sleepCount = new Count(1, 5);
-    public Count keyCount = new Count(0, 1);
     public GameObject exit;
-    public GameObject door;
-    public GameObject key;
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
     public GameObject[] foodTiles;
@@ -61,7 +58,7 @@ public class BoardManager : MonoBehaviour
                 if (x == -1 || x == columns || y == -1 || y == rows)
                     toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
 
-                GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                GameObject instance = Instantiate(toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
 
                 instance.transform.SetParent(boardHolder);
             }
@@ -96,15 +93,8 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(foodTiles, sleepCount.minimum, sleepCount.maximum);
         int enemyCount = (int)Mathf.Log(level, 2f);
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
-
-        bool isEven = GameMngr.instance.Level % 2 == 0;
-
-        if (isEven)
-        {
-            Instantiate(key, RandomPosition(), Quaternion.identity);
-            Instantiate(door, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
-        }
-        else
-            Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
+        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
     }
+
+
 }
